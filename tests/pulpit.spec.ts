@@ -10,12 +10,12 @@ test.describe('Standard payment', () => {
     let pulpitPage: PulpitPage;
 
     test.beforeEach(async ({ page }) => {
-        const userId = correctloginData.userId;
-        const userPassword = correctloginData.userPassword;
+        const id = correctloginData.userId;
+        const password = correctloginData.userPassword;
 
         await page.goto('/');
         loginPage = new LoginPage(page);
-        await loginPage.loginsuccess(userId, userPassword);
+        await loginPage.loginsuccess(id, password);
 
         pulpitPage = new PulpitPage(page);
 
@@ -23,20 +23,20 @@ test.describe('Standard payment', () => {
 
     test('successful quick payment', async ({ page }) => {
         // Arrange
-        const receiverId = correctQuickPaymentData.receiverId;
-        const transferAmount = correctQuickPaymentData.transferAmount;
-        const transferTitle = correctQuickPaymentData.transferTitle;
+        const receiver_Id = correctQuickPaymentData.receiverId;
+        const transfer_Amount = correctQuickPaymentData.transferAmount;
+        const transfer_Title = correctQuickPaymentData.transferTitle;
 
         const expectedTransferReceiver = 'Michael Scott';
 
         const initialBalance = await page.locator('#money_value').innerText();
-        const expectedBalance = Number(initialBalance) - Number(transferAmount);
+        const expectedBalance = Number(initialBalance) - Number(transfer_Amount);
 
         // Act
-        await pulpitPage.executeQuickPayment(receiverId, transferAmount, transferTitle);
+        await pulpitPage.executeQuickPayment(receiver_Id, transfer_Amount, transfer_Title);
 
         // Assert
-        await expect(pulpitPage.expectedPaymentMessage).toHaveText(`Przelew wykonany! ${expectedTransferReceiver} - ${transferAmount},00PLN - ${transferTitle}`);
+        await expect(pulpitPage.expectedPaymentMessage).toHaveText(`Przelew wykonany! ${expectedTransferReceiver} - ${transfer_Amount},00PLN - ${transfer_Title}`);
         await expect(pulpitPage.moneyValue).toHaveText(`${expectedBalance}`);
 
     });
@@ -63,12 +63,12 @@ test.describe('Mobile TopUp payments', () => {
     const topUpPhoneNumber = correctPhoneTopUpData.topUpPhoneNumber;
 
     test.beforeEach(async ({ page }) => {
-        const userId = correctloginData.userId;
-        const userPassword = correctloginData.userPassword;
+        const id = correctloginData.userId;
+        const password = correctloginData.userPassword;
 
         await page.goto('/')
         loginPage = new LoginPage(page);
-        await loginPage.loginsuccess(userId, userPassword);
+        await loginPage.loginsuccess(id, password);
 
         pulpitPage = new PulpitPage(page);
 
@@ -76,16 +76,16 @@ test.describe('Mobile TopUp payments', () => {
 
     test('successful mobile topup', async ({ page }) => {
         // Arrange
-        const topUpAmount = correctPhoneTopUpData.topUpAmount;
+        const top_Up_Amount = correctPhoneTopUpData.topUpAmount;
 
         const initialBalance = await page.locator('#money_value').innerText();
-        const expectedBalance = Number(initialBalance) - Number(topUpAmount);
+        const expectedBalance = Number(initialBalance) - Number(top_Up_Amount);
 
         // Act
-        await pulpitPage.successfulMobileTopUp(topUpPhoneNumber, topUpAmount);
+        await pulpitPage.successfulMobileTopUp(topUpPhoneNumber, top_Up_Amount);
 
         // Assert
-        await expect(pulpitPage.expectedPaymentMessage).toHaveText(`Doładowanie wykonane! ${topUpAmount},00PLN na numer ${topUpPhoneNumber}`);
+        await expect(pulpitPage.expectedPaymentMessage).toHaveText(`Doładowanie wykonane! ${top_Up_Amount},00PLN na numer ${topUpPhoneNumber}`);
         await expect(pulpitPage.moneyValue).toHaveText(`${expectedBalance}`);
 
     });
@@ -106,12 +106,12 @@ test.describe('Mobile TopUp payments', () => {
 
     test('checking minimum limit mobile topup', async ({ }) => {
         // Arrange
-        const topUpAmount = moneyLimits.topUpAmountMin;
+        const top_Up_Amount = moneyLimits.topUpAmountMin;
 
         const expectedErrorMessage = 'kwota musi być większa lub równa 5';
 
         // Act
-        await pulpitPage.checkingMinimumLimit(topUpPhoneNumber, topUpAmount);
+        await pulpitPage.checkingMinimumLimit(topUpPhoneNumber, top_Up_Amount);
 
         // Assert
         await expect(pulpitPage.topUpAmountErrorMessage).toHaveText(expectedErrorMessage);
@@ -120,12 +120,12 @@ test.describe('Mobile TopUp payments', () => {
 
     test('checking maximum limit mobile topup', async ({ }) => {
         // Arrange
-        const topUpAmount = moneyLimits.topUpAmountMax;
+        const top_Up_Amount = moneyLimits.topUpAmountMax;
 
         const expectedErrorMessage = 'kwota musi być mniejsza lub równa 150';
 
         // Act
-        await pulpitPage.checkingMaximumLimit(topUpPhoneNumber, topUpAmount);
+        await pulpitPage.checkingMaximumLimit(topUpPhoneNumber, top_Up_Amount);
 
         // Assert
         await expect(pulpitPage.topUpAmountErrorMessage).toHaveText(expectedErrorMessage);

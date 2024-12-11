@@ -19,12 +19,12 @@ test.describe('User login to Demobank', () => {
 
     test('successful login with correct credentials', async ({ }) => {
         // Arrange
-        const userId = correctloginData.userId;
-        const userPassword = correctloginData.userPassword;
+        const id = correctloginData.userId;
+        const password = correctloginData.userPassword;
         const expectedUsername = 'Jan Demobankowy';
 
         // Act
-        await loginPage.loginsuccess(userId, userPassword);
+        await loginPage.loginsuccess(id, password);
 
         // Assert
         await expect(pulpitPage.username).toHaveText(expectedUsername);
@@ -33,11 +33,11 @@ test.describe('User login to Demobank', () => {
 
     test('unsuccessful login with too short username', async ({ }) => {
         // Arrange
-        const incorrectuserId = incorrectloginData.incorrectuserId;
+        const incorrect_id = incorrectloginData.incorrectuserId;
         const expectedErrorMessage = 'identyfikator ma min. 8 znaków';
 
         // Act
-        await loginPage.loginshortusername(incorrectuserId);
+        await loginPage.loginshortusername(incorrect_id);
         await loginPage.passwordInput.click();
 
         // Assert
@@ -47,11 +47,11 @@ test.describe('User login to Demobank', () => {
 
     test('unsuccessful login with too short password', async ({ }) => {
         // Arrange
-        const incorrectuserPassword = incorrectloginData.incorrectuserPassword;
+        const incorrect_password = incorrectloginData.incorrectuserPassword;
         const expectedErrorMessage = 'hasło ma min. 8 znaków';
 
         // Act
-        await loginPage.loginshortpassword(incorrectuserPassword);
+        await loginPage.loginshortpassword(incorrect_password);
         await loginPage.passwordInput.blur();
 
         // Assert

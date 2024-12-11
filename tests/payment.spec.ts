@@ -11,25 +11,25 @@ test.describe('Payment actions', () => {
     let pulpitPage: PulpitPage;
     let paymentPage: PaymentPage;
 
-    const receiverName = correctStandardPaymentData.receiverName;
-    const accountNumber = correctStandardPaymentData.accountNumber;
+    const receiver_Name = correctStandardPaymentData.receiverName;
+    const account_Number = correctStandardPaymentData.accountNumber;
     const amount = correctStandardPaymentData.amount;
-    const transferTitle = correctStandardPaymentData.transferTitle;
-    const calendarMonthId = correctStandardPaymentData.calendarMonthId;
+    const transfer_Title = correctStandardPaymentData.transferTitle;
+    const calendar_Month_Id = correctStandardPaymentData.calendarMonthId;
 
     test.beforeEach(async ({ page }) => {
-        const userId = correctloginData.userId;
-        const userPassword = correctloginData.userPassword;
+        const id = correctloginData.userId;
+        const password = correctloginData.userPassword;
 
         await page.goto('/');
         loginPage = new LoginPage(page);
-        await loginPage.loginsuccess(userId, userPassword);
+        await loginPage.loginsuccess(id, password);
 
         pulpitPage = new PulpitPage(page);
         await pulpitPage.clickingPaymentButton();
 
         paymentPage = new PaymentPage(page);
-        await paymentPage.fillingInPaymentDetails(receiverName, accountNumber, amount, transferTitle, calendarMonthId);
+        await paymentPage.fillingInPaymentDetails(receiver_Name, account_Number, amount, transfer_Title, calendar_Month_Id);
 
     });
 
@@ -39,20 +39,20 @@ test.describe('Payment actions', () => {
         await paymentPage.closeButton.click();
 
         // Assert
-        await expect(paymentPage.expectedMessage).toHaveText(`Przelew wykonany! ${amount},00PLN dla ${receiverName}`);
+        await expect(paymentPage.expectedMessage).toHaveText(`Przelew wykonany! ${amount},00PLN dla ${receiver_Name}`);
 
     });
 
     test('successful payment with email and adding a contact to the list', async ({ }) => {
         // Arrange
         const email = correctStandardPaymentData.email;
-        const receiverContactName = correctStandardPaymentData.receiverContactName;
+        const contact_Name = correctStandardPaymentData.receiverContactName;
 
         // Act
-        await paymentPage.executePaymentWithEmailAndReceiversList(email, receiverContactName);
+        await paymentPage.executePaymentWithEmailAndReceiversList(email, contact_Name);
 
         // Assert
-        await expect(paymentPage.expectedMessage).toHaveText(`Przelew wykonany! ${amount},00PLN dla ${receiverName}`);
+        await expect(paymentPage.expectedMessage).toHaveText(`Przelew wykonany! ${amount},00PLN dla ${receiver_Name}`);
 
     });
 
@@ -66,23 +66,23 @@ test.describe('Payment actions', () => {
         await paymentPage.closeButton.click();
 
         // Assert
-        await expect(paymentPage.expectedMessage).toHaveText(`Przelew wykonany! ${amount},00PLN dla ${receiverName}`);
+        await expect(paymentPage.expectedMessage).toHaveText(`Przelew wykonany! ${amount},00PLN dla ${receiver_Name}`);
         await expect(paymentPage.commissionAmount).toHaveText(expectedCommissionAmount);
 
     });
 
     test('successful standard payment with address', async ({ }) => {
         // Arrange
-        const streetNrHomeNrApartmentNr = addressData.streetNrHomeNrApartmentNr;
-        const postalCodeCity = addressData.postalCodeCity;
+        const address_Details_1 = addressData.streetNrHomeNrApartmentNr;
+        const address_Details_2 = addressData.postalCodeCity;
 
-        await paymentPage.fillingInAddress(streetNrHomeNrApartmentNr, postalCodeCity);
-        await paymentPage.fillingInPaymentDetails(receiverName, accountNumber, amount, transferTitle, calendarMonthId);
+        await paymentPage.fillingInAddress(address_Details_1, address_Details_2);
+        await paymentPage.fillingInPaymentDetails(receiver_Name, account_Number, amount, transfer_Title, calendar_Month_Id);
         await paymentPage.transferButton.click();
         await paymentPage.closeButton.click();
 
         // Assert
-        await expect(paymentPage.expectedMessage).toHaveText(`Przelew wykonany! ${amount},00PLN dla ${receiverName}`);
+        await expect(paymentPage.expectedMessage).toHaveText(`Przelew wykonany! ${amount},00PLN dla ${receiver_Name}`);
 
     });
 });
